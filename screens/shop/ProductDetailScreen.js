@@ -25,8 +25,12 @@ function ProductDetailScreen(props) {
       <View style={styles.actions}>
         <Button color={Colors.primary} title="Add to cart" onPress={() => {}} />
       </View>
-      <Text style={styles.price}>${selectedProduct.price.toFixed(2)}</Text>
-      <Text style={styles.description}>{selectedProduct.description}</Text>
+      <DefaultText style={styles.price}>
+        ${selectedProduct.price.toFixed(2)}
+      </DefaultText>
+      <DefaultText style={styles.description}>
+        {selectedProduct.description}
+      </DefaultText>
     </ScrollView>
   );
 }

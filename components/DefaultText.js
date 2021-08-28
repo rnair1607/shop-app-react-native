@@ -3,13 +3,13 @@ import { StyleSheet, Text } from "react-native";
 
 function DefaultText(props) {
   return (
-    <Text style={{ ...StyleSheet.text, ...props.style }}>{props.childern}</Text>
+    <Text style={{ ...styles.text, ...props.style }}>{props.children}</Text>
   );
 }
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
   text: {
-    // fontFamily: "open-sans",
+    fontFamily: "open-sans",
   },
 });
 

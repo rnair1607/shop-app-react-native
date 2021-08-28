@@ -28,8 +28,10 @@ function ProductItem(props) {
             <Image style={styles.image} source={{ uri: props.imageUrl }} />
           </View>
           <View style={styles.details}>
-            <Text style={styles.title}>{props.title}</Text>
-            <Text style={styles.price}>${props.price.toFixed(2)}</Text>
+            <DefaultText style={styles.title}>{props.title}</DefaultText>
+            <DefaultText style={styles.price}>
+              ${props.price.toFixed(2)}
+            </DefaultText>
           </View>
           <View style={styles.actions}>
             <Button
