@@ -28,7 +28,7 @@ function CartItem(props) {
           ${props.amount.toFixed(2)}
         </DefaultText>
         <TouchableCmp onPress={props.onRemove} style={styles.deleteButton}>
-          <Ionicons name="trash-bin-outline" size={23} color="red" />
+          <Ionicons name="ios-trash" size={23} color="red" />
         </TouchableCmp>
       </View>
     </View>
