@@ -27,9 +27,11 @@ function CartItem(props) {
         <DefaultText style={styles.title}>
           ${props.amount.toFixed(2)}
         </DefaultText>
-        <TouchableCmp onPress={props.onRemove} style={styles.deleteButton}>
-          <Ionicons name="ios-trash" size={23} color="red" />
-        </TouchableCmp>
+        {props.deletable && (
+          <TouchableCmp onPress={props.onRemove} style={styles.deleteButton}>
+            <Ionicons name="ios-trash" size={23} color="red" />
+          </TouchableCmp>
+        )}
       </View>
     </View>
   );

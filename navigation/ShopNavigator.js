@@ -10,6 +10,8 @@ import ProductsOverviewScreen from "../screens/shop/ProductsOverviewScreen";
 import ProductDetailScreen from "../screens/shop/ProductDetailScreen";
 import CartScreen from "../screens/shop/CartScreen";
 import OrdersScreen from "../screens/shop/OrdersScreen";
+import UserProductsScreen from "../screens/user/UserProductsScreen";
+import EditProductsScreen from "../screens/user/EditProductsScreen";
 
 const defaultNavOptions = {
   headerStyle: {
@@ -51,10 +53,26 @@ const OrderNavigator = createStackNavigator(
   }
 );
 
+const AdminNavigator = createStackNavigator(
+  {
+    UserProducts: UserProductsScreen,
+    EditProduct: EditProductsScreen,
+  },
+  {
+    navigationOptions: {
+      drawerIcon: (config) => (
+        <Ionicons name="create-outline" size={23} color={config.tintColor} />
+      ),
+    },
+    defaultNavigationOptions: defaultNavOptions,
+  }
+);
+
 const ShopNavigator = createDrawerNavigator(
   {
     Products: ProductsNavigator,
     Orders: OrderNavigator,
+    Admin: AdminNavigator,
   },
   {
     contentOptions: {

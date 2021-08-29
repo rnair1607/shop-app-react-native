@@ -32,7 +32,7 @@ function CartScreen() {
         <DefaultText style={styles.summaryText}>
           Total:{" "}
           <DefaultText style={styles.amount}>
-            ${cartTotalAmount.toFixed(2)}
+            ${Math.round(cartTotalAmount.toFixed(2) * 100) / 100}
           </DefaultText>
         </DefaultText>
         <Button
@@ -55,6 +55,7 @@ function CartScreen() {
             quantity={data.item.quantity}
             amount={data.item.sum}
             title={data.item.productTitle}
+            deletable={true}
             onRemove={() => {
               dispatch(cartActions.removeFromCart(data.item.productId));
             }}
