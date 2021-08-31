@@ -3,12 +3,13 @@ import React from "react";
 import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 import { enableScreens } from "react-native-screens";
-import { createStore, combineReducers } from "redux";
+import { createStore, combineReducers, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import productsReducer from "./store/reducers/products";
 import cartReducer from "./store/reducers/cart";
 import orderReducer from "./store/reducers/orders";
 import ShopNavigator from "./navigation/ShopNavigator";
+import thunk from "redux-thunk";
 
 import { composeWithDevTools } from "redux-devtools-extension";
 
@@ -21,7 +22,7 @@ const rootReducer = combineReducers({
 });
 
 // const store = createStore(rootReducer, composeWithDevTools());
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, applyMiddleware(thunk));
 
 export default function App() {
   let [fontsLoaded] = useFonts({
