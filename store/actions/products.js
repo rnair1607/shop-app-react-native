@@ -6,9 +6,18 @@ export const UPDATE_PRODUCT = "UPDATE_PRODUCT";
 export const SET_PRODUCTS = "SET_PRODUCTS";
 
 export const deleteProduct = (productId) => {
-  return {
-    type: DELETE_PRODUCT,
-    pid: productId,
+  return async (dispatch) => {
+    await fetch(
+      `https://shop-app-react-native-f032a-default-rtdb.asia-southeast1.firebasedatabase.app/products/${productId}.json`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    dispatch({
+      type: DELETE_PRODUCT,
+      pid: productId,
+    });
   };
 };
 
@@ -42,7 +51,7 @@ export const fetchProducts = () => {
         type: SET_PRODUCTS,
         products: loadedProducts,
       });
-      console.log(`fetch res data`, resData);
+      // console.log(`fetch res data`, resData);
     } catch (error) {
       throw error;
     }
@@ -68,7 +77,7 @@ export const createProduct = (title, description, imageUrl, price) => {
         }
       );
       const resData = await response.json();
-      console.log(`res data`, resData);
+      // console.log(`res data`, resData);
 
       dispatch({
         type: CREATE_PRODUCT,
@@ -79,10 +88,36 @@ export const createProduct = (title, description, imageUrl, price) => {
     }
   };
 };
+
 export const updateProduct = (id, title, description, imageUrl) => {
-  return {
-    type: UPDATE_PRODUCT,
-    productData: { title, description, imageUrl },
-    pid: id,
+  return async (dispatch) => {
+    try {
+      await fetch(
+        `https://shop-app-react-native-f032a-default-rtdb.asia-southeast1.firebasedatabase.app/products/${id}.json`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            title,
+            description,
+            imageUrl,
+          }),
+        }
+      );
+
+      dispatch({
+        type: UPDATE_PRODUCT,
+        pid: id,
+        productData: {
+          title,
+          description,
+          imageUrl,
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
   };
 };

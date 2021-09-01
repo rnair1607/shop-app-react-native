@@ -36,11 +36,22 @@ function ProductsOverviewScreen(props) {
       seterror(error.message);
     }
     setisLOading(false);
-  }, [dispatch]);
+  }, [dispatch, setisLOading, seterror]);
 
   useEffect(() => {
     fetchProducts();
   }, [dispatch, fetchProducts]);
+
+  useEffect(() => {
+    const willFocusSub = props.navigation.addListener(
+      "willFocus",
+      fetchProducts
+    );
+
+    return () => {
+      willFocusSub.remove();
+    };
+  }, [fetchProducts]);
 
   if (isLOading) {
     return (
