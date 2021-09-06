@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
-import { ActivityIndicator, StyleSheet, View } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import Colors from "../constants/Colors";
+import { View, ActivityIndicator, StyleSheet } from "react-native";
 import { useDispatch } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import Colors from "../constants/Colors";
 import * as authActions from "../store/actions/auth";
 
-function StartUpScreen(props) {
+const StartupScreen = (props) => {
   const dispatch = useDispatch();
+
   useEffect(() => {
     const tryLogin = async () => {
       const userData = await AsyncStorage.getItem("userData");
@@ -17,7 +18,6 @@ function StartUpScreen(props) {
       }
       const transformedData = JSON.parse(userData);
       const { token, userId, expiryDate } = transformedData;
-
       const expirationDate = new Date(expiryDate);
 
       if (expirationDate <= new Date() || !token || !userId) {
@@ -34,10 +34,10 @@ function StartUpScreen(props) {
 
   return (
     <View style={styles.screen}>
-      <ActivityIndicator size="Large" color={Colors.primary} />
+      <ActivityIndicator size="large" color={Colors.primary} />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   screen: {
@@ -47,4 +47,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default StartUpScreen;
+export default StartupScreen;
