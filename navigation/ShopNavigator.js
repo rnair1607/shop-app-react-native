@@ -18,6 +18,7 @@ import UserProductsScreen from "../screens/user/UserProductsScreen";
 import EditProductsScreen from "../screens/user/EditProductsScreen";
 import Counter from "../screens/test/Counter";
 import AuthScreen from "../screens/user/AuthScreen";
+import StartUpScreen from "../screens/StartUpScreen";
 
 const defaultNavOptions = {
   headerStyle: {
@@ -88,11 +89,17 @@ const ShopNavigator = createDrawerNavigator(
   }
 );
 
-const AuthNavigator = createStackNavigator({
-  Auth: AuthScreen,
-});
+const AuthNavigator = createStackNavigator(
+  {
+    Auth: AuthScreen,
+  },
+  {
+    defaultNavigationOptions: defaultNavOptions,
+  }
+);
 
 const MainNavigator = createSwitchNavigator({
+  Startup: StartUpScreen,
   Auth: AuthNavigator,
   Shop: ShopNavigator,
 });
