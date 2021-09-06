@@ -1,5 +1,11 @@
-import React from "react";
-import { StyleSheet, View, FlatList, Button } from "react-native";
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  View,
+  FlatList,
+  Button,
+  ActivityIndicator,
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import DefaultText from "../../components/DefaultText";
 import CartItem from "../../components/shop/CartItem";
@@ -8,6 +14,7 @@ import * as cartActions from "../../store/actions/cart";
 import * as orderActions from "../../store/actions/orders";
 
 function CartScreen() {
+  const [isLoading, setisLoading] = useState(false);
   const dispatch = useDispatch();
   const cartTotalAmount = useSelector((state) => state.cart.totalAmount);
   const cartItems = useSelector((state) => {
@@ -26,6 +33,12 @@ function CartScreen() {
     );
   });
 
+  const sendOrderHandler = async () => {
+    setisLoading(true);
+    await dispatch(cartActions.removeFromCart(data.item.productId));
+    setisLoading(false);
+  };
+
   return (
     <View style={styles.screen}>
       <View style={styles.summary}>
@@ -35,14 +48,18 @@ function CartScreen() {
             ${Math.round(cartTotalAmount.toFixed(2) * 100) / 100}
           </DefaultText>
         </DefaultText>
-        <Button
-          title="Order Now"
-          color={Colors.accent}
-          disabled={cartItems.length === 0}
-          onPress={() => {
-            dispatch(orderActions.addOrder(cartItems, cartTotalAmount));
-          }}
-        />
+        {isLoading ? (
+          <ActivityIndicator size="small" color={Colors.primary} />
+        ) : (
+          <Button
+            title="Order Now"
+            color={Colors.accent}
+            disabled={cartItems.length === 0}
+            onPress={() => {
+              dispatch(orderActions.addOrder(cartItems, cartTotalAmount));
+            }}
+          />
+        )}
       </View>
       {/* <View>
         <DefaultText>CART ITEMS</DefaultText>
@@ -56,9 +73,7 @@ function CartScreen() {
             amount={data.item.sum}
             title={data.item.productTitle}
             deletable={true}
-            onRemove={() => {
-              dispatch(cartActions.removeFromCart(data.item.productId));
-            }}
+            onRemove={sendOrderHandler}
           />
         )}
       />

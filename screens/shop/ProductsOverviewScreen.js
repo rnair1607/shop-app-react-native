@@ -16,6 +16,7 @@ import Colors from "../../constants/Colors";
 import DefaultText from "../../components/DefaultText";
 function ProductsOverviewScreen(props) {
   const [isLOading, setisLOading] = useState(false);
+  const [isRefreshing, setisRefreshing] = useState(false);
   const [error, seterror] = useState();
   const products = useSelector((state) => state.products.availableProducts);
   const dispatch = useDispatch();
@@ -29,17 +30,20 @@ function ProductsOverviewScreen(props) {
 
   const fetchProducts = useCallback(async () => {
     seterror(null);
-    setisLOading(true);
+    setisRefreshing(true);
     try {
       await dispatch(productsActions.fetchProducts());
     } catch (error) {
       seterror(error.message);
     }
-    setisLOading(false);
+    setisRefreshing(false);
   }, [dispatch, setisLOading, seterror]);
 
   useEffect(() => {
-    fetchProducts();
+    setisLOading(true);
+    fetchProducts().then(() => {
+      setisLOading(false);
+    });
   }, [dispatch, fetchProducts]);
 
   useEffect(() => {
@@ -84,6 +88,8 @@ function ProductsOverviewScreen(props) {
 
   return (
     <FlatList
+      onRefresh={fetchProducts}
+      refreshing={isRefreshing}
       data={products}
       renderItem={(data) => (
         <ProductItem

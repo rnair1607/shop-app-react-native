@@ -1,5 +1,9 @@
 import React from "react";
-import { createAppContainer, createDrawer } from "react-navigation";
+import {
+  createAppContainer,
+  createDrawer,
+  createSwitchNavigator,
+} from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import { createDrawerNavigator } from "react-navigation-drawer";
 import Colors from "../constants/Colors";
@@ -12,6 +16,8 @@ import CartScreen from "../screens/shop/CartScreen";
 import OrdersScreen from "../screens/shop/OrdersScreen";
 import UserProductsScreen from "../screens/user/UserProductsScreen";
 import EditProductsScreen from "../screens/user/EditProductsScreen";
+import Counter from "../screens/test/Counter";
+import AuthScreen from "../screens/user/AuthScreen";
 
 const defaultNavOptions = {
   headerStyle: {
@@ -25,6 +31,7 @@ const defaultNavOptions = {
 
 const ProductsNavigator = createStackNavigator(
   {
+    // counter: Counter,
     productsOverView: ProductsOverviewScreen,
     productDetail: ProductDetailScreen,
     Cart: CartScreen,
@@ -81,4 +88,13 @@ const ShopNavigator = createDrawerNavigator(
   }
 );
 
-export default createAppContainer(ShopNavigator);
+const AuthNavigator = createStackNavigator({
+  Auth: AuthScreen,
+});
+
+const MainNavigator = createSwitchNavigator({
+  Auth: AuthNavigator,
+  Shop: ShopNavigator,
+});
+
+export default createAppContainer(MainNavigator);
