@@ -13,6 +13,7 @@ import ShopNavigator from "./navigation/ShopNavigator";
 import thunk from "redux-thunk";
 
 import { composeWithDevTools } from "redux-devtools-extension";
+import NavigationContainer from "./navigation/NavigationContainer";
 
 // enableScreens();
 
@@ -37,7 +38,7 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <ShopNavigator />
+      <NavigationContainer />
       <StatusBar style="auto" />
     </Provider>
   );
