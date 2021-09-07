@@ -1,11 +1,10 @@
-import React, { useCallback, useReducer, useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer, useCallback } from "react";
 import {
-  Button,
-  KeyboardAvoidingView,
   ScrollView,
-  StatusBar,
-  StyleSheet,
   View,
+  KeyboardAvoidingView,
+  StyleSheet,
+  Button,
   ActivityIndicator,
   Alert,
 } from "react-native";
@@ -41,10 +40,12 @@ const formReducer = (state, action) => {
   }
   return state;
 };
-function AuthScreen(props) {
+
+const AuthScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [isSignUp, setIsSignUp] = useState(false);
   const [error, setError] = useState();
+  const [isSignup, setIsSignup] = useState(false);
+  const dispatch = useDispatch();
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
@@ -58,17 +59,15 @@ function AuthScreen(props) {
     formIsValid: false,
   });
 
-  const dispatch = useDispatch();
-
   useEffect(() => {
     if (error) {
-      Alert.alert("An error occured", error, [{ text: "Okay" }]);
+      Alert.alert("An Error Occurred!", error, [{ text: "Okay" }]);
     }
   }, [error]);
 
   const authHandler = async () => {
     let action;
-    if (isSignUp) {
+    if (isSignup) {
       action = authActions.signup(
         formState.inputValues.email,
         formState.inputValues.password
@@ -79,15 +78,13 @@ function AuthScreen(props) {
         formState.inputValues.password
       );
     }
-
     setError(null);
     setIsLoading(true);
     try {
       await dispatch(action);
       props.navigation.navigate("Shop");
     } catch (err) {
-      setError(err);
-      // Alert.alert("Something went wrong", err, [{ text: "Okay" }]);
+      setError(err.message);
       setIsLoading(false);
     }
   };
@@ -105,7 +102,11 @@ function AuthScreen(props) {
   );
 
   return (
-    <KeyboardAvoidingView behavior="padding" style={styles.screen}>
+    <KeyboardAvoidingView
+      behavior="padding"
+      keyboardVerticalOffset={50}
+      style={styles.screen}
+    >
       <LinearGradient colors={["#ffedff", "#ffe3ff"]} style={styles.gradient}>
         <Card style={styles.authContainer}>
           <ScrollView>
@@ -116,7 +117,7 @@ function AuthScreen(props) {
               required
               email
               autoCapitalize="none"
-              errorText="Please enter a valid email address"
+              errorText="Please enter a valid email address."
               onInputChange={inputChangeHandler}
               initialValue=""
             />
@@ -128,16 +129,16 @@ function AuthScreen(props) {
               required
               minLength={5}
               autoCapitalize="none"
-              errorText="Please enter a valid password"
+              errorText="Please enter a valid password."
               onInputChange={inputChangeHandler}
               initialValue=""
             />
             <View style={styles.buttonContainer}>
               {isLoading ? (
-                <ActivityIndicator size="large" color={Colors.primary} />
+                <ActivityIndicator size="small" color={Colors.primary} />
               ) : (
                 <Button
-                  title={isSignUp ? "SIGN UP" : "LOGIN"}
+                  title={isSignup ? "Sign Up" : "Login"}
                   color={Colors.primary}
                   onPress={authHandler}
                 />
@@ -145,12 +146,10 @@ function AuthScreen(props) {
             </View>
             <View style={styles.buttonContainer}>
               <Button
-                title={isSignUp ? "Switch to login" : "Switch to sign up"}
+                title={`Switch to ${isSignup ? "Login" : "Sign Up"}`}
                 color={Colors.accent}
                 onPress={() => {
-                  setIsSignUp((prevState) => {
-                    return !prevState;
-                  });
+                  setIsSignup((prevState) => !prevState);
                 }}
               />
             </View>
@@ -159,35 +158,30 @@ function AuthScreen(props) {
       </LinearGradient>
     </KeyboardAvoidingView>
   );
-}
+};
+
+AuthScreen.navigationOptions = {
+  headerTitle: "Authenticate",
+};
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    // justifyContent: "center",
-    // alignItems: "center",
+  },
+  gradient: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   authContainer: {
     width: "80%",
     maxWidth: 400,
-    // height: "50%",
     maxHeight: 400,
     padding: 20,
-  },
-  gradient: {
-    // width: "100%",
-    // height: "100%",
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
   },
   buttonContainer: {
     marginTop: 10,
   },
 });
-
-AuthScreen.navigationOptions = {
-  headerTitle: "Authenticate",
-};
 
 export default AuthScreen;
